@@ -44,8 +44,8 @@ export default function App() {
     if (authScreen === "login") {
       return (
         <LoginPage
-          onLogin={() => setAuthScreen("terms")}
-          onSignup={() => setAuthScreen("signup")}
+          onLoginSuccess={enterApp}
+          onSignup={() => setAuthScreen("terms")}
         />
       );
     }

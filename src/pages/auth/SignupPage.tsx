@@ -5,6 +5,7 @@ import { Button } from "../../components/ui/Button";
 import { ProgressBar } from "../../components/ui/ProgressBar";
 import { TextField } from "../../components/ui/TextField";
 import { levels, signupInterests } from "../../data/mock";
+import { saveUser } from "../../utils/authStorage";
 
 type SignupPageProps = {
   onComplete: () => void;
@@ -72,6 +73,14 @@ export function SignupPage({ onComplete, onBack, onLogin }: SignupPageProps) {
       setLevelError("영어 실력을 선택해주세요");
       return;
     }
+
+    saveUser({
+      name: name.trim(),
+      email: email.trim(),
+      password,
+      interests: selectedInterests,
+      level: selectedLevel,
+    });
 
     onComplete();
   };

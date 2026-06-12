@@ -6,15 +6,27 @@ import { StatusBar } from "../../components/layout/StatusBar";
 import { Button } from "../../components/ui/Button";
 import { Divider } from "../../components/ui/Divider";
 import { TextField } from "../../components/ui/TextField";
+import { verifyLogin } from "../../utils/authStorage";
 
 type LoginPageProps = {
-  onLogin: () => void;
+  onLoginSuccess: () => void;
   onSignup: () => void;
 };
 
-export function LoginPage({ onLogin, onSignup }: LoginPageProps) {
+export function LoginPage({ onLoginSuccess, onSignup }: LoginPageProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+
+  const handleLogin = () => {
+    if (!verifyLogin(email, password)) {
+      setLoginError("이메일 또는 비밀번호를 확인해주세요");
+      return;
+    }
+
+    setLoginError("");
+    onLoginSuccess();
+  };
 
   return (
     <MobileFrame>
@@ -44,16 +56,26 @@ export function LoginPage({ onLogin, onSignup }: LoginPageProps) {
               type="email"
               autoComplete="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                if (loginError) setLoginError("");
+              }}
             />
             <TextField
               placeholder="비밀번호"
               type="password"
               autoComplete="current-password"
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                if (loginError) setLoginError("");
+              }}
             />
           </div>
+
+          {loginError && (
+            <p className="mt-[12px] text-[12px] text-red-500">{loginError}</p>
+          )}
 
           <button
             type="button"
@@ -63,7 +85,7 @@ export function LoginPage({ onLogin, onSignup }: LoginPageProps) {
           </button>
 
           <div className="mt-[16px]">
-            <Button onClick={onLogin}>로그인</Button>
+            <Button onClick={handleLogin}>로그인</Button>
           </div>
 
           <div className="mt-[22px]">
